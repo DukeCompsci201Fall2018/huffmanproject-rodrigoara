@@ -45,8 +45,8 @@ public class HuffProcessor {
 	 */
 	public void compress(BitInputStream in, BitOutputStream out){
 
-		int[] counts = readForCounts(in);
-		HuffNode root = makeTreeFromCounts(counts);
+		freq = readForCounts(in);
+		HuffNode root = makeTreeFromCounts(freq);
 		String[] codings = makeCodingsFromTree(root);
 		
 		out.writeBits(BITS_PER_INT, HUFF_TREE);
@@ -103,16 +103,14 @@ public class HuffProcessor {
 	}
 
 	private void writeHeader(HuffNode root, BitOutputStream out) {
-		if (root.myLeft != null && root.myRight != null) {
-			out.writeBits(1, 0);
-			writeHeader(root.myLeft, out);
-			writeHeader(root.myRight, out);
-		}
-		else {
+		if (root.myValue != -1) {
 			out.writeBits(1, 1);
 			out.writeBits(9, root.myValue);
 			return;
-		}	
+		}
+		out.writeBits(1, 0);
+		writeHeader(root.myLeft, out);
+		writeHeader(root.myRight, out);
 	}
 	
 	private void writeCompressedBits(String[] codings, BitInputStream in, BitOutputStream out) {

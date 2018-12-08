@@ -123,7 +123,7 @@ public class BitInputStream extends InputStream {
 		value |= bitBuffer >>> (available - numBits);
 		bitBuffer &= bitMask[available - numBits];
 		available -= numBits;
-		//bitsRead += numBits;
+		bitsRead += numBits;
 		return value;
 	}
 	
