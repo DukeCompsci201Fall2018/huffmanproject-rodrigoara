@@ -45,7 +45,8 @@ public class HuffProcessor {
 
 		int[] counts = readForCounts(in);
 		HuffNode root = makeTreeFromCounts(counts);
-		String[] codings = makeCodingsFromTree(root);
+		String[] codings = new String[ALPH_SIZE + 1];
+		makeCodingsFromTree(root, "", codings);
 		out.writeBits(BITS_PER_INT, HUFF_TREE);
 		writeHeader(root,out);
 		
@@ -87,13 +88,7 @@ public class HuffProcessor {
 		return root;
 	}
 	
-	private String[] makeCodingsFromTree(HuffNode root) {
-		String[] encodings = new String[ALPH_SIZE + 1];
-		codingHelper(root,"",encodings);
-		return encodings;
-	}
-
-	private void codingHelper(HuffNode root, String path, String[] encodings) {
+	private void makeCodingsFromTree(HuffNode root, String path, String[] encodings) {
 		if (root.myLeft == null && root.myRight == null) {
 			encodings[root.myValue] = path;
 			if (myDebugLevel >= DEBUG_HIGH) {
@@ -101,8 +96,8 @@ public class HuffProcessor {
 			}
 			return;
 		}
-		codingHelper(root.myLeft, path + "0", encodings);
-		codingHelper(root.myRight, path + "1", encodings);
+		makeCodingsFromTree(root.myLeft, path + "0", encodings);
+		makeCodingsFromTree(root.myRight, path + "1", encodings);
 	}
 
 	private void writeHeader(HuffNode root, BitOutputStream out) {
