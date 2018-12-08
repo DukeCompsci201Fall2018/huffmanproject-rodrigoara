@@ -126,9 +126,8 @@ public class HuffProcessor {
 			out.writeBits(code.length(), Integer.parseInt(code, 2));
 			bit = in.readBits(BITS_PER_WORD);
 		}
-		String code = codings[PSEUDO_EOF];
-		out.writeBits(code.length(), Integer.parseInt(code, 2));
-		in.reset();
+		String bitlast = codings[PSEUDO_EOF];
+		out.writeBits(bitlast.length(), Integer.parseInt(bitlast, 2));
 	}
 	/**
 	 * Decompresses a file. Output file must be identical bit-by-bit to the
