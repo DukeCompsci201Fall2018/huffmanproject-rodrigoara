@@ -25,7 +25,7 @@ public class HuffProcessor {
 	public static final int DEBUG_HIGH = 4;
 	public static final int DEBUG_LOW = 1;
 	private int[] freq;
-	PriorityQueue<HuffNode> pq = new PriorityQueue<>();
+	private PriorityQueue<HuffNode> pq = new PriorityQueue<>();
 	
 	public HuffProcessor() {
 		this(0);
@@ -62,8 +62,10 @@ public class HuffProcessor {
 		freq[PSEUDO_EOF] = 1;
 		int bit = in.readBits(BITS_PER_WORD);
 		while (bit != 1) {
-			freq[bit]++;
-			bit = in.readBits(BITS_PER_WORD);
+			if (!(bit > freq.length)) {
+				freq[bit]++;
+				bit = in.readBits(BITS_PER_WORD);
+			}
 		}
 		in.reset();	
 		return freq;
